@@ -57,4 +57,17 @@ class MainActivity : AppCompatActivity() {
                     // ...
                 }
     }
+
+    private fun isUserConnected(): Boolean {
+        return (auth.currentUser != null)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (isUserConnected()) {
+            Toast.makeText(applicationContext, "O usuário está logado!", Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(applicationContext, "Necessário fazer login!", Toast.LENGTH_LONG).show()
+        }
+    }
 }
