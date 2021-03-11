@@ -1,4 +1,4 @@
-package com.example.desafio_leal_apps
+package com.example.desafio_leal_apps.view.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.desafio_leal_apps.databinding.FragmentLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -70,5 +71,8 @@ class LoginFragment : Fragment() {
         } else {
             Toast.makeText(context, "Necessário fazer login!", Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun navigateToHome() {
     }
 }

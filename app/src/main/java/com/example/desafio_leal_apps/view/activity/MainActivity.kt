@@ -1,7 +1,8 @@
-package com.example.desafio_leal_apps
+package com.example.desafio_leal_apps.view.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.desafio_leal_apps.R
 
 class MainActivity : AppCompatActivity() {
 
