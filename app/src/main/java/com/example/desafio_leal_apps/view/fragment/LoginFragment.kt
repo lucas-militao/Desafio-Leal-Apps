@@ -8,8 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import com.example.desafio_leal_apps.R
 import com.example.desafio_leal_apps.databinding.FragmentLoginBinding
+import com.example.desafio_leal_apps.view.activity.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_login.*
 
@@ -18,6 +22,7 @@ class LoginFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: FragmentLoginBinding
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +42,9 @@ class LoginFragment : Fragment() {
     }
 
     private fun setupView() {
+        navController = NavHostFragment.findNavController(this)
+        (activity as MainActivity).supportActionBar?.title = "Login"
+
         binding.loginButton.setOnClickListener { login(
             email = emailTextField.text.toString(),
             password = passwordTextField.text.toString()
@@ -50,7 +58,7 @@ class LoginFragment : Fragment() {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("TAG", "signInWithEmail:success")
                     val user = auth.currentUser
-                    Toast.makeText(context, "O usuário foi logado", Toast.LENGTH_LONG).show()
+                    navigateToHome()
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w("TAG", "signInWithEmail:failure", task.exception)
@@ -67,12 +75,13 @@ class LoginFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         if (isUserConnected()) {
-            Toast.makeText(context, "O usuário está logado!", Toast.LENGTH_LONG).show()
+            navigateToHome()
         } else {
-            Toast.makeText(context, "Necessário fazer login!", Toast.LENGTH_LONG).show()
+            return
         }
     }
 
     private fun navigateToHome() {
+        navController.navigate(R.id.action_loginFragment_to_homeFragment)
     }
 }

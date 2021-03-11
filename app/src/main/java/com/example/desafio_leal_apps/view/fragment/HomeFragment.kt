@@ -3,11 +3,16 @@ package com.example.desafio_leal_apps.view.fragment
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.example.desafio_leal_apps.R
 import com.example.desafio_leal_apps.databinding.FragmentHomeBinding
+import com.example.desafio_leal_apps.view.activity.MainActivity
 
 class HomeFragment : Fragment() {
 
@@ -24,10 +29,29 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater)
         binding.lifecycleOwner = this
 
+        setupView()
+
         return binding.root
     }
 
     private fun setupView() {
+        setHasOptionsMenu(true)
 
+        (activity as MainActivity).supportActionBar?.let {
+            it.setDisplayHomeAsUpEnabled(true)
+            it.title = "Principal"
+        }
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            android.R.id.home -> {
+                Toast.makeText(context, "cliquei aqui", Toast.LENGTH_LONG).show()
+                return false
+            }
+            else -> true
+        }
+    }
+
+
 }
