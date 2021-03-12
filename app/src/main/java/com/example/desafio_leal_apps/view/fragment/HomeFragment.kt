@@ -7,18 +7,22 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.desafio_leal_apps.R
 import com.example.desafio_leal_apps.databinding.FragmentHomeBinding
 import com.example.desafio_leal_apps.view.activity.MainActivity
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: FragmentHomeBinding
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +43,11 @@ class HomeFragment : Fragment() {
 
     private fun setupView() {
         setHasOptionsMenu(true)
+        navController = NavHostFragment.findNavController(this)
+
+        with(binding) {
+            this.addFloatingButton.setOnClickListener { navigateToForm() }
+        }
 
         (activity as MainActivity).supportActionBar?.let {
             it.setDisplayHomeAsUpEnabled(true)
@@ -53,9 +62,11 @@ class HomeFragment : Fragment() {
                 (activity as MainActivity).onBackPressed()
                 return false
             }
-            else -> true
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
-
+    private fun navigateToForm() {
+        navController.navigate(R.id.action_homeFragment_to_formFragment)
+    }
 }
