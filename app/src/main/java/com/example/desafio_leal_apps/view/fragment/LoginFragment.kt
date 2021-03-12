@@ -43,7 +43,11 @@ class LoginFragment : Fragment() {
 
     private fun setupView() {
         navController = NavHostFragment.findNavController(this)
-        (activity as MainActivity).supportActionBar?.title = "Login"
+
+        (activity as MainActivity).supportActionBar?.let {
+            it.setDisplayHomeAsUpEnabled(false)
+            it.title = "Login"
+        }
 
         binding.loginButton.setOnClickListener { login(
             email = emailTextField.text.toString(),

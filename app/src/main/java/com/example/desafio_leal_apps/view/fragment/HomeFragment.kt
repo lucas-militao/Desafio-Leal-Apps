@@ -13,9 +13,11 @@ import androidx.navigation.ui.NavigationUI
 import com.example.desafio_leal_apps.R
 import com.example.desafio_leal_apps.databinding.FragmentHomeBinding
 import com.example.desafio_leal_apps.view.activity.MainActivity
+import com.google.firebase.auth.FirebaseAuth
 
 class HomeFragment : Fragment() {
 
+    private lateinit var auth: FirebaseAuth
     private lateinit var binding: FragmentHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +30,7 @@ class HomeFragment : Fragment() {
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater)
         binding.lifecycleOwner = this
+        auth = FirebaseAuth.getInstance()
 
         setupView()
 
@@ -46,7 +49,8 @@ class HomeFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             android.R.id.home -> {
-                Toast.makeText(context, "cliquei aqui", Toast.LENGTH_LONG).show()
+                auth.signOut()
+                (activity as MainActivity).onBackPressed()
                 return false
             }
             else -> true
