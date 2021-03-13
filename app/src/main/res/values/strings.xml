@@ -8,4 +8,6 @@
     <string name="salvar">Salvar</string>
     <string name="descricao">Descrição</string>
     <string name="nome">Nome</string>
+    <string name="observacoes">Observações</string>
+    <string name="foto">Foto</string>
 </resources>

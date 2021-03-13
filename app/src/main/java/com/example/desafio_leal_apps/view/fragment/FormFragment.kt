@@ -2,13 +2,11 @@ package com.example.desafio_leal_apps.view.fragment
 
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import com.example.desafio_leal_apps.R
 import com.example.desafio_leal_apps.databinding.FragmentFormBinding
 import com.example.desafio_leal_apps.model.Exercise
 import com.example.desafio_leal_apps.model.Training
@@ -56,9 +54,22 @@ class FormFragment : Fragment() {
             it.setDisplayHomeAsUpEnabled(true)
             it.title = "Formulário"
         }
+    }
 
-        with(binding) {
-            this.saveTrainingButton.setOnClickListener {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_form, menu)
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            android.R.id.home -> {
+                (activity as MainActivity).onBackPressed()
+                return false
+            }
+
+            R.id.saveTraining -> {
                 if (!isEmpty()) {
                     saveTraining(
                             this.trainingNameTextField.text.toString().toInt(),
@@ -68,15 +79,7 @@ class FormFragment : Fragment() {
                 }
                 else
                     Toast.makeText(context, "Necessário que todos os campos sejam preenchidos!", Toast.LENGTH_LONG).show()
-            }
-        }
-    }
 
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId) {
-            android.R.id.home -> {
-                (activity as MainActivity).onBackPressed()
                 return false
             }
             else -> super.onOptionsItemSelected(item)
