@@ -1,10 +1,8 @@
 package com.example.desafio_leal_apps.view.fragment
 
-import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.desafio_leal_apps.R
 import com.example.desafio_leal_apps.databinding.FragmentFormBinding
@@ -14,13 +12,8 @@ import com.example.desafio_leal_apps.view.activity.MainActivity
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_form.*
-import java.sql.Date
 import java.sql.Timestamp
-import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.format.DateTimeFormatter
 import java.util.*
-import java.util.concurrent.atomic.AtomicInteger
 import kotlin.collections.ArrayList
 
 class FormFragment : Fragment() {
@@ -28,6 +21,7 @@ class FormFragment : Fragment() {
     private lateinit var binding: FragmentFormBinding
     private lateinit var database: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
+    private lateinit var exercises: ArrayList<Exercise>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +35,8 @@ class FormFragment : Fragment() {
         database = FirebaseDatabase.getInstance()
         databaseReference = database.reference
 
+        exercises = ArrayList()
+
         setupView()
 
         return binding.root
@@ -52,7 +48,19 @@ class FormFragment : Fragment() {
 
         (activity as MainActivity).supportActionBar?.let {
             it.setDisplayHomeAsUpEnabled(true)
-            it.title = "Formulário"
+            it.title = "Novo Treino"
+        }
+
+        with(binding) {
+            addExerciseFloatingButton.setOnClickListener {
+                addExercise(
+                        name = this.exerciseNameField.text.toString().toInt(),
+                        image = this.exerciseImageField.text.toString(),
+                        comments = this.exerciseCommentsField.text.toString()
+                )
+
+                cleanAllExerciseFields()
+            }
         }
     }
 
@@ -70,10 +78,11 @@ class FormFragment : Fragment() {
             }
 
             R.id.saveTraining -> {
-                if (!isEmpty()) {
+                if (!isTrainingFieldsEmpty()) {
                     saveTraining(
                             this.trainingNameTextField.text.toString().toInt(),
-                            this.descriptionTextField.text.toString()
+                            this.descriptionTextField.text.toString(),
+                            exercises
                     )
                     (activity as MainActivity).onBackPressed()
                 }
@@ -86,17 +95,37 @@ class FormFragment : Fragment() {
         }
     }
 
-    private fun saveTraining(name: Int, description: String) {
+    private fun saveTraining(name: Int, description: String, exercises: ArrayList<Exercise>) {
         val newTraining = Training(
                 name,
                 description,
                 Timestamp(Date().time),
-                ArrayList()
+                exercises
         )
         databaseReference.child("Treinos").child(newTraining.name.toString()).setValue(newTraining)
     }
 
-    private fun isEmpty(): Boolean {
-        return (trainingNameTextField.text.isNullOrEmpty() || descriptionTextField.text.isNullOrEmpty())
+    private fun isTrainingFieldsEmpty(): Boolean {
+        return (trainingNameTextField.text.isNullOrEmpty() ||
+                descriptionTextField.text.isNullOrEmpty())
+    }
+
+    private fun isExerciseFieldsEmpty(): Boolean {
+        return (binding.exerciseNameField.text.isNullOrEmpty() ||
+                binding.exerciseCommentsField.text.isNullOrEmpty())
+    }
+
+    private fun cleanAllExerciseFields() {
+        this.exerciseNameField.setText("")
+        this.exerciseImageField.setText("")
+        this.exerciseCommentsField.setText("")
+    }
+
+    private fun addExercise(name: Int, image: String, comments: String) {
+        if (!isExerciseFieldsEmpty()) {
+            exercises.add(Exercise(name, image, comments))
+        } else {
+            Toast.makeText(context, "É necessário preencher os campos nome e observações", Toast.LENGTH_LONG).show()
+        }
     }
 }
