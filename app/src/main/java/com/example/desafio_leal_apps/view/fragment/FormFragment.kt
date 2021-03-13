@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.desafio_leal_apps.databinding.FragmentFormBinding
@@ -15,6 +16,9 @@ import com.example.desafio_leal_apps.view.activity.MainActivity
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_form.*
+import java.sql.Date
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -44,7 +48,7 @@ class FormFragment : Fragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     private fun setupView() {
         setHasOptionsMenu(true)
 
@@ -53,7 +57,19 @@ class FormFragment : Fragment() {
             it.title = "Formulário"
         }
 
-        binding.saveButton.setOnClickListener { saveNewTraining() }
+        with(binding) {
+            this.saveTrainingButton.setOnClickListener {
+                if (!isEmpty()) {
+                    saveTraining(
+                            this.trainingNameTextField.text.toString().toInt(),
+                            this.descriptionTextField.text.toString()
+                    )
+                    (activity as MainActivity).onBackPressed()
+                }
+                else
+                    Toast.makeText(context, "Necessário que todos os campos sejam preenchidos!", Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
 
@@ -67,20 +83,17 @@ class FormFragment : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun saveNewTraining() {
-        val exerciseList = ArrayList<Exercise>()
-        exerciseList.add(Exercise(
-            1,
-            "blablabla",
-            "bate bunda"
-        ))
+    private fun saveTraining(name: Int, description: String) {
         val newTraining = Training(
-            UUID.randomUUID().toString(),
-            "Um treino bacana para morrer",
-            DateTimeFormatter.ISO_INSTANT.format(Instant.now()),
-            exerciseList
+                name,
+                description,
+                Timestamp(Date().time),
+                ArrayList()
         )
-        databaseReference.child("Treinos").child(newTraining.name).setValue(newTraining)
+        databaseReference.child("Treinos").child(newTraining.name.toString()).setValue(newTraining)
+    }
+
+    private fun isEmpty(): Boolean {
+        return (trainingNameTextField.text.isNullOrEmpty() || descriptionTextField.text.isNullOrEmpty())
     }
 }
