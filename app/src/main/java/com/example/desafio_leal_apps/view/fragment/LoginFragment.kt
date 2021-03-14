@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import com.example.desafio_leal_apps.R
 import com.example.desafio_leal_apps.databinding.FragmentLoginBinding
 import com.example.desafio_leal_apps.view.activity.MainActivity

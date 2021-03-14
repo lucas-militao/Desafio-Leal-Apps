@@ -11,4 +11,5 @@
     <string name="observacoes">Observações</string>
     <string name="foto">Foto</string>
     <string name="adicionar_novo_exercicio">Adicionar novo exercício</string>
+    <string name="adicionar_novo_treino">Adicionar novo treino</string>
 </resources>

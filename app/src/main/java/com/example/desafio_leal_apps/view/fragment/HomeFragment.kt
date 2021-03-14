@@ -1,28 +1,30 @@
 package com.example.desafio_leal_apps.view.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.NavigationUI
 import com.example.desafio_leal_apps.R
 import com.example.desafio_leal_apps.databinding.FragmentHomeBinding
+import com.example.desafio_leal_apps.model.Training
 import com.example.desafio_leal_apps.view.activity.MainActivity
+import com.example.desafio_leal_apps.view.adapter.TrainingListAdapter
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.fragment_home.*
+import java.sql.Timestamp
+import java.util.*
+import kotlin.collections.ArrayList
 
 class HomeFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: FragmentHomeBinding
     private lateinit var navController: NavController
+    private lateinit var trainings: ArrayList<Training>
+    private lateinit var adapter: TrainingListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +55,41 @@ class HomeFragment : Fragment() {
             it.setDisplayHomeAsUpEnabled(true)
             it.title = "Principal"
         }
+
+        adapter = TrainingListAdapter(
+                onDelete = {},
+                onEdit = {}
+        )
+
+        trainings = ArrayList()
+        trainings.add(Training(
+                name = 11212,
+                description = "sjfksnfk",
+                date = Timestamp(Date().time)
+        ))
+        trainings.add(Training(
+                name = 3434,
+                description = "sjfksnfk",
+                date = Timestamp(Date().time)
+        ))
+        trainings.add(Training(
+                name = 112454512,
+                description = "sjfksnfk",
+                date = Timestamp(Date().time)
+        ))
+        trainings.add(Training(
+                name = 1123312,
+                description = "sjfksnfk",
+                date = Timestamp(Date().time)
+        ))
+        trainings.add(Training(
+                name = 11121212,
+                description = "sjfksnfk",
+                date = Timestamp(Date().time)
+        ))
+        adapter.updateList(trainings)
+
+        binding.trainingList.adapter = adapter
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

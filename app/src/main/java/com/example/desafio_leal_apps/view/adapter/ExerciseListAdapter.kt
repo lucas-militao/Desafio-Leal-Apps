@@ -23,8 +23,6 @@ class ExerciseListAdapter : RecyclerView.Adapter<ExerciseListAdapter.ViewHolder>
                 .centerCrop()
                 .error(R.drawable.image_exercicio_generico)
                 .into(binding.exerciseImage)
-
-            binding.itemLayout.setOnClickListener { print("APERTOU EM ${exercise.name}") }
         }
     }
 
