@@ -14,6 +14,7 @@ import com.example.desafio_leal_apps.model.Training
 import com.example.desafio_leal_apps.view.activity.MainActivity
 import com.example.desafio_leal_apps.view.adapter.TrainingListAdapter
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import java.sql.Timestamp
 import java.util.*
 import kotlin.collections.ArrayList
@@ -23,6 +24,8 @@ class HomeFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: FragmentHomeBinding
     private lateinit var navController: NavController
+    private lateinit var database: FirebaseDatabase
+    private lateinit var databaseReference: DatabaseReference
     private lateinit var trainings: ArrayList<Training>
     private lateinit var adapter: TrainingListAdapter
 
@@ -37,6 +40,8 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater)
         binding.lifecycleOwner = this
         auth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance()
+        databaseReference = database.reference
 
         setupView()
 
@@ -62,33 +67,6 @@ class HomeFragment : Fragment() {
         )
 
         trainings = ArrayList()
-        trainings.add(Training(
-                name = 11212,
-                description = "sjfksnfk",
-                date = Timestamp(Date().time)
-        ))
-        trainings.add(Training(
-                name = 3434,
-                description = "sjfksnfk",
-                date = Timestamp(Date().time)
-        ))
-        trainings.add(Training(
-                name = 112454512,
-                description = "sjfksnfk",
-                date = Timestamp(Date().time)
-        ))
-        trainings.add(Training(
-                name = 1123312,
-                description = "sjfksnfk",
-                date = Timestamp(Date().time)
-        ))
-        trainings.add(Training(
-                name = 11121212,
-                description = "sjfksnfk",
-                date = Timestamp(Date().time)
-        ))
-        adapter.updateList(trainings)
-
         binding.trainingList.adapter = adapter
     }
 
@@ -105,5 +83,31 @@ class HomeFragment : Fragment() {
 
     private fun navigateToForm() {
         navController.navigate(R.id.action_homeFragment_to_formFragment)
+    }
+
+    private fun eventDatabase() {
+        val childEventListener = object : ChildEventListener {
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+                TODO("Not yet implemented")
+            }
+        }
+
+        databaseReference.addChildEventListener(childEventListener)
     }
 }

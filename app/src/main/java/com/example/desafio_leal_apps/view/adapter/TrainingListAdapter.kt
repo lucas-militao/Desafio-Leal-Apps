@@ -7,16 +7,16 @@ import com.example.desafio_leal_apps.databinding.ItemExerciseBinding
 import com.example.desafio_leal_apps.databinding.ItemTrainingBinding
 import com.example.desafio_leal_apps.model.Training
 
-class TrainingListAdapter(var onDelete: () -> Unit, var onEdit: () -> Unit): RecyclerView.Adapter<TrainingListAdapter.ViewHolder>() {
+class TrainingListAdapter(var onDelete: (training: Training) -> Unit, var onEdit: (training: Training) -> Unit): RecyclerView.Adapter<TrainingListAdapter.ViewHolder>() {
 
     private var trainings = ArrayList<Training>()
 
     inner class ViewHolder (private var binding: ItemTrainingBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(training: Training, onDelete: () -> Unit, onEdit: () -> Unit) {
+        fun bind(training: Training, onDelete: (training: Training) -> Unit, onEdit: (training: Training) -> Unit) {
             binding.trainingName.text = training.name.toString()
             binding.trainingDescription.text = training.description
-            binding.deleteTraining.setOnClickListener { onDelete() }
-            binding.editTraining.setOnClickListener { onEdit() }
+            binding.deleteTraining.setOnClickListener { onDelete(training) }
+            binding.editTraining.setOnClickListener { onEdit(training) }
         }
     }
 
