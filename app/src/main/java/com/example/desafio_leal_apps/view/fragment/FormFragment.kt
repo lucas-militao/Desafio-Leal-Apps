@@ -9,8 +9,9 @@ import com.example.desafio_leal_apps.databinding.FragmentFormBinding
 import com.example.desafio_leal_apps.model.Exercise
 import com.example.desafio_leal_apps.model.Training
 import com.example.desafio_leal_apps.view.activity.MainActivity
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.example.desafio_leal_apps.view.adapter.ExerciseListAdapter
+import com.google.firebase.database.*
+import com.google.firebase.database.ktx.getValue
 import kotlinx.android.synthetic.main.fragment_form.*
 import java.sql.Timestamp
 import java.util.*
@@ -22,6 +23,7 @@ class FormFragment : Fragment() {
     private lateinit var database: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
     private lateinit var exercises: ArrayList<Exercise>
+    private lateinit var adapter: ExerciseListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +41,14 @@ class FormFragment : Fragment() {
 
         setupView()
 
+        exercises.add(Exercise(1212, "sdsds", "32323sdsdsd"))
+        exercises.add(Exercise(15, "sdsds", "32323sdsdsd"))
+        exercises.add(Exercise(1245412, "sdsds", "32323sdsdsd"))
+        exercises.add(Exercise(67, "sdsds", "32323sdsdsd"))
+        exercises.add(Exercise(1234312, "sdsds", "32323sdsdsd"))
+
+        adapter.updateList(exercises)
+
         return binding.root
     }
 
@@ -53,15 +63,21 @@ class FormFragment : Fragment() {
 
         with(binding) {
             addExerciseFloatingButton.setOnClickListener {
-                addExercise(
-                        name = this.exerciseNameField.text.toString().toInt(),
-                        image = this.exerciseImageField.text.toString(),
-                        comments = this.exerciseCommentsField.text.toString()
-                )
-
-                cleanAllExerciseFields()
+                if (!isExerciseFieldsEmpty()) {
+                    addExercise(
+                            name = this.exerciseNameField.text.toString().toInt(),
+                            image = this.exerciseImageField.text.toString(),
+                            comments = this.exerciseCommentsField.text.toString()
+                    )
+                    cleanAllExerciseFields()
+                } else {
+                    Toast.makeText(context, "É necessário preencher os campos nome e observações", Toast.LENGTH_LONG).show()
+                }
             }
         }
+
+        adapter = ExerciseListAdapter()
+        binding.exerciseList.adapter = adapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -122,10 +138,18 @@ class FormFragment : Fragment() {
     }
 
     private fun addExercise(name: Int, image: String, comments: String) {
-        if (!isExerciseFieldsEmpty()) {
-            exercises.add(Exercise(name, image, comments))
-        } else {
-            Toast.makeText(context, "É necessário preencher os campos nome e observações", Toast.LENGTH_LONG).show()
-        }
+        exercises.add(Exercise(name, image, comments))
+        adapter.updateList(exercises)
     }
+
+
+
+//    private fun getExerciseData(snapshot: DataSnapshot) {
+//        snapshot.getValue<Training>()?.exercise.let {
+//            if (!it.isNullOrEmpty()) {
+//                exercises = it
+//                adapter.updateList(exercises)
+//            }
+//        }
+//    }
 }

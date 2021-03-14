@@ -1,7 +1,7 @@
 package com.example.desafio_leal_apps.model
 
 data class Exercise (
-    val number: Int,
-    val image: String,
-    val comments: String
+    var name: Int? = 0,
+    var image: String? = "",
+    var comments: String? = ""
 )
