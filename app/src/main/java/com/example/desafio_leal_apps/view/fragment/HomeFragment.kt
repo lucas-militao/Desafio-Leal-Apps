@@ -21,6 +21,7 @@ import java.sql.Timestamp
 import java.util.*
 import kotlin.collections.ArrayList
 
+@Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class HomeFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
@@ -65,7 +66,10 @@ class HomeFragment : Fragment() {
         }
 
         adapter = TrainingListAdapter(
-                onDelete = {},
+                onDelete = {
+                    if (it.name != null)
+                        deleteTraining(it.name)
+                },
                 onEdit = {}
         )
 
@@ -95,13 +99,8 @@ class HomeFragment : Fragment() {
 
     private fun eventDatabase() {
         val childEventListener = object : ChildEventListener {
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                TODO("Not yet implemented")
-            }
+            override fun onCancelled(error: DatabaseError) {}
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
                 updateList(snapshot)
@@ -123,9 +122,15 @@ class HomeFragment : Fragment() {
         trainings.clear()
         for (value in data.children) {
             val training = value.getValue<Training>()
-            if (training != null)
-                trainings.add(training)
+            if (training != null) {
+                if (training.user == auth.currentUser.uid)
+                    trainings.add(training)
+            }
         }
         adapter.updateList(trainings)
+    }
+
+    private fun deleteTraining(nome: Int) {
+        databaseReference.child("Treinos").child(nome.toString()).removeValue()
     }
 }

@@ -10,6 +10,7 @@ import com.example.desafio_leal_apps.model.Exercise
 import com.example.desafio_leal_apps.model.Training
 import com.example.desafio_leal_apps.view.activity.MainActivity
 import com.example.desafio_leal_apps.view.adapter.ExerciseListAdapter
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_form.*
@@ -19,6 +20,7 @@ import kotlin.collections.ArrayList
 
 class FormFragment : Fragment() {
 
+    private lateinit var auth: FirebaseAuth
     private lateinit var binding: FragmentFormBinding
     private lateinit var database: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
@@ -36,16 +38,11 @@ class FormFragment : Fragment() {
 
         database = FirebaseDatabase.getInstance()
         databaseReference = database.reference
+        auth = FirebaseAuth.getInstance()
 
         exercises = ArrayList()
 
         setupView()
-
-        exercises.add(Exercise(1212, "sdsds", "32323sdsdsd"))
-        exercises.add(Exercise(15, "sdsds", "32323sdsdsd"))
-        exercises.add(Exercise(1245412, "sdsds", "32323sdsdsd"))
-        exercises.add(Exercise(67, "sdsds", "32323sdsdsd"))
-        exercises.add(Exercise(1234312, "sdsds", "32323sdsdsd"))
 
         adapter.updateList(exercises)
 
@@ -62,6 +59,7 @@ class FormFragment : Fragment() {
         }
 
         with(binding) {
+
             addExerciseFloatingButton.setOnClickListener {
                 if (!isExerciseFieldsEmpty()) {
                     addExercise(
@@ -96,6 +94,7 @@ class FormFragment : Fragment() {
             R.id.saveTraining -> {
                 if (!isTrainingFieldsEmpty()) {
                     saveTraining(
+                            auth.currentUser.uid.toString(),
                             this.trainingNameTextField.text.toString().toInt(),
                             this.descriptionTextField.text.toString(),
                             exercises
@@ -111,8 +110,9 @@ class FormFragment : Fragment() {
         }
     }
 
-    private fun saveTraining(name: Int, description: String, exercises: ArrayList<Exercise>) {
+    private fun saveTraining(user: String, name: Int, description: String, exercises: ArrayList<Exercise>) {
         val newTraining = Training(
+                user = user,
                 name = name,
                 description = description,
                 createdDate = Timestamp(Date().time).time,
@@ -141,15 +141,4 @@ class FormFragment : Fragment() {
         exercises.add(Exercise(name, image, comments))
         adapter.updateList(exercises)
     }
-
-
-
-//    private fun getExerciseData(snapshot: DataSnapshot) {
-//        snapshot.getValue<Training>()?.exercise.let {
-//            if (!it.isNullOrEmpty()) {
-//                exercises = it
-//                adapter.updateList(exercises)
-//            }
-//        }
-//    }
 }
