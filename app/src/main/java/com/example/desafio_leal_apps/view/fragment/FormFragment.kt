@@ -10,8 +10,8 @@ import com.example.desafio_leal_apps.model.Exercise
 import com.example.desafio_leal_apps.model.Training
 import com.example.desafio_leal_apps.view.activity.MainActivity
 import com.example.desafio_leal_apps.view.adapter.ExerciseListAdapter
-import com.google.firebase.database.*
-import com.google.firebase.database.ktx.getValue
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_form.*
 import java.sql.Timestamp
 import java.util.*
@@ -113,10 +113,10 @@ class FormFragment : Fragment() {
 
     private fun saveTraining(name: Int, description: String, exercises: ArrayList<Exercise>) {
         val newTraining = Training(
-                name,
-                description,
-                ServerValue.TIMESTAMP,
-                exercises
+                name = name,
+                description = description,
+                createdDate = Timestamp(Date().time).time,
+                exercise = exercises
         )
         databaseReference.child("Treinos").child(newTraining.name.toString()).setValue(newTraining)
     }

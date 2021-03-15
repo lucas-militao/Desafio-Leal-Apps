@@ -70,33 +70,6 @@ class HomeFragment : Fragment() {
         )
 
         trainings = ArrayList()
-        trainings.add(Training(
-                name = 11212,
-                description = "sjfksnfk",
-                date = ServerValue.TIMESTAMP
-        ))
-        trainings.add(Training(
-                name = 3434,
-                description = "sjfksnfk",
-                date = ServerValue.TIMESTAMP
-        ))
-        trainings.add(Training(
-                name = 112454512,
-                description = "sjfksnfk",
-                date = ServerValue.TIMESTAMP
-        ))
-        trainings.add(Training(
-                name = 1123312,
-                description = "sjfksnfk",
-                date = ServerValue.TIMESTAMP
-        ))
-        trainings.add(Training(
-                name = 11121212,
-                description = "sjfksnfk",
-                date = ServerValue.TIMESTAMP
-        ))
-
-//        trainings = ArrayList()
         binding.trainingList.adapter = adapter
         adapter.updateList(trainings)
     }
@@ -131,20 +104,28 @@ class HomeFragment : Fragment() {
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-
+                updateList(snapshot)
             }
 
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                for (value in snapshot.children) {
-                    val training = value.value
-                }
+                updateList(snapshot)
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
-                TODO("Not yet implemented")
+                updateList(snapshot)
             }
         }
 
         databaseReference.addChildEventListener(childEventListener)
+    }
+
+    private fun updateList(data: DataSnapshot) {
+        trainings.clear()
+        for (value in data.children) {
+            val training = value.getValue<Training>()
+            if (training != null)
+                trainings.add(training)
+        }
+        adapter.updateList(trainings)
     }
 }
