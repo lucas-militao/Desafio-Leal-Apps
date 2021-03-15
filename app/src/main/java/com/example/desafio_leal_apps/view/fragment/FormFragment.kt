@@ -115,7 +115,7 @@ class FormFragment : Fragment() {
         val newTraining = Training(
                 name,
                 description,
-                Timestamp(Date().time),
+                ServerValue.TIMESTAMP,
                 exercises
         )
         databaseReference.child("Treinos").child(newTraining.name.toString()).setValue(newTraining)

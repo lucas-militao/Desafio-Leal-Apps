@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -15,6 +16,7 @@ import com.example.desafio_leal_apps.view.activity.MainActivity
 import com.example.desafio_leal_apps.view.adapter.TrainingListAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.database.ktx.getValue
 import java.sql.Timestamp
 import java.util.*
 import kotlin.collections.ArrayList
@@ -44,6 +46,7 @@ class HomeFragment : Fragment() {
         databaseReference = database.reference
 
         setupView()
+        subscribeUI()
 
         return binding.root
     }
@@ -67,7 +70,39 @@ class HomeFragment : Fragment() {
         )
 
         trainings = ArrayList()
+        trainings.add(Training(
+                name = 11212,
+                description = "sjfksnfk",
+                date = ServerValue.TIMESTAMP
+        ))
+        trainings.add(Training(
+                name = 3434,
+                description = "sjfksnfk",
+                date = ServerValue.TIMESTAMP
+        ))
+        trainings.add(Training(
+                name = 112454512,
+                description = "sjfksnfk",
+                date = ServerValue.TIMESTAMP
+        ))
+        trainings.add(Training(
+                name = 1123312,
+                description = "sjfksnfk",
+                date = ServerValue.TIMESTAMP
+        ))
+        trainings.add(Training(
+                name = 11121212,
+                description = "sjfksnfk",
+                date = ServerValue.TIMESTAMP
+        ))
+
+//        trainings = ArrayList()
         binding.trainingList.adapter = adapter
+        adapter.updateList(trainings)
+    }
+
+    private fun subscribeUI() {
+        eventDatabase()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -96,11 +131,13 @@ class HomeFragment : Fragment() {
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                TODO("Not yet implemented")
+
             }
 
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                TODO("Not yet implemented")
+                for (value in snapshot.children) {
+                    val training = value.value
+                }
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
