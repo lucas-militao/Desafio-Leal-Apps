@@ -10,6 +10,9 @@
         <action
             android:id="@+id/action_loginFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
     </fragment>
 
     <fragment
@@ -24,4 +27,8 @@
         android:id="@+id/formFragment"
         android:name="com.example.desafio_leal_apps.view.fragment.FormFragment"
         android:label="FormFragment" />
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.example.desafio_leal_apps.view.fragment.SignUpFragment"
+        android:label="SignUpFragment" />
 </navigation>

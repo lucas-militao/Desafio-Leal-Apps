@@ -52,6 +52,10 @@ class LoginFragment : Fragment() {
             email = emailTextField.text.toString(),
             password = passwordTextField.text.toString()
         ) }
+
+        binding.singUpButton.setOnClickListener {
+            navigateToSignUp()
+        }
     }
 
     @SuppressLint("ShowToast")
@@ -65,7 +69,7 @@ class LoginFragment : Fragment() {
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w("TAG", "signInWithEmail:failure", task.exception)
-                    Toast.makeText(context, "Authentication failed.",
+                    Toast.makeText(context, "Email ou senha incorretos",
                         Toast.LENGTH_SHORT).show()
                 }
             }
@@ -86,5 +90,9 @@ class LoginFragment : Fragment() {
 
     private fun navigateToHome() {
         navController.navigate(R.id.action_loginFragment_to_homeFragment)
+    }
+
+    private fun navigateToSignUp() {
+        navController.navigate(R.id.action_loginFragment_to_signUpFragment)
     }
 }

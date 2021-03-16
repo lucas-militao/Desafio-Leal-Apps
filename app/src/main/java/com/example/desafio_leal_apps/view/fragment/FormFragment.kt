@@ -18,6 +18,7 @@ import java.sql.Timestamp
 import java.util.*
 import kotlin.collections.ArrayList
 
+@Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class FormFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
@@ -94,7 +95,7 @@ class FormFragment : Fragment() {
             R.id.saveTraining -> {
                 if (!isTrainingFieldsEmpty()) {
                     saveTraining(
-                            auth.currentUser.uid.toString(),
+                            auth.currentUser.uid,
                             this.trainingNameTextField.text.toString().toInt(),
                             this.descriptionTextField.text.toString(),
                             exercises
